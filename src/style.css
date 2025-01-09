@@ -1,0 +1,14 @@
+@import "core/assets/style/calendar.css";
+@import "core/assets/style/HYBlackMythU.css";
+
+html,body{
+  padding: 0;
+  margin: 0;
+
+  font-family: BlackMyth;
+
+}
+
+.m-rice-paper-layout{
+  display: flex;
+}

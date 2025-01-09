@@ -1,0 +1,44 @@
+:root {
+  --m-calendar-w: 100%;
+  --m-calendar-h: 100%;
+  --m-calendar-header: 22px;
+  --m-calendar-main-h: calc(var(--m-calendar-h) - var(--m-calendar-header) - 5px);
+
+  --transform-y: 0;
+}
+
+.m-calendar {
+  width: var(--m-calendar-w);
+  height: var(--m-calendar-h);
+}
+
+.m-calendar-view-wrapper {
+  height: var(--m-calendar-main-h);
+  overflow: hidden;
+
+}
+
+.m-calendar-view {
+  display: grid;
+  grid-template-rows:  repeat(8, 1fr);
+  grid-template-columns: repeat(7, 1fr);
+  height: calc(100% / 6 * 8);
+  overflow: hidden;
+  transform: translateY(calc(-100% / 8 - var(--transform-y)));
+}
+
+.m-calendar-header {
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.m-calendar-row {
+  display: grid;
+}
+
+.m-calendar-cell {
+  .m-border-main{
+    background: unset !important;
+    backdrop-filter: unset !important;
+  }
+  /*height: calc(var(--m-calendar-main-h) / 7);*/
+}
