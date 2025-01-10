@@ -5,21 +5,21 @@ import { ref } from 'vue';
 
 
 const dateRef=  ref(new Date());
-
+const showLunarDateRef = ref(true);
 </script>
 
 <template>
 
   <m-rice-paper layout="full-screen">
-    <div class="flex justify-center flex-items-center w-100vw h-100vh">
+    <div class="flex flex-col justify-center flex-items-center w-100vw h-100vh">
 
-<!--      <m-date-picker v-model="dateRef"/>-->
+      <m-switch active-info="干支纪日法" inactive-info="公历纪日法" v-model="showLunarDateRef" />
 
 
       <div class="wrapper">
         <MCalendar v-model="dateRef">
           <template #cell="data">
-            <LunarInfo :data="data"/>
+            <LunarInfo :show-lunar-date="showLunarDateRef" :data="data"/>
           </template>
         </MCalendar>
       </div>

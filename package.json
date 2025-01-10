@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@shuimo-design/lunar": "^0.0.6",
+    "@shuimo-design/lunar": "^0.0.7",
     "@vitejs/plugin-vue-jsx": "^4.1.1",
     "dayjs": "^1.11.13",
     "shuimo-ui": "npm:shuimo-ui-nightly@latest",

@@ -6,7 +6,7 @@
  *
  * 江湖的业务千篇一律，复杂的代码好几百行。
  */
-import { Component, computed, defineComponent, onMounted, ref, watch } from 'vue';
+import { Component, computed, defineComponent, onUnmounted, ref, watch } from 'vue';
 import useCalendar from './composables/useCalendar.ts';
 import MCalendarCell from './components/MCalendarCell.tsx';
 
@@ -17,9 +17,9 @@ type MCalendarProps = {
 export default defineComponent<MCalendarProps>((_props, { slots }) => {
   const props = _props as Required<MCalendarProps>;
 
-  const { getCalendar, dateArrRef, unshift,push } = useCalendar({ props });
+  const { getCalendar, dateArrRef, unshift, push } = useCalendar({ props });
 
-  const weekInfo = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+  const weekInfo = ['日', '壹', '贰', '叁', '肆', '伍', '陆'];
 
 
   // ---------------------
@@ -35,7 +35,6 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
       clearTimeout(scrollTimer.value);
     }
     // scrollTimer.value = setTimeout(() => {
-    //   console.log('clear');
     //   scrollDistance.value = 0;
     // }, SCROLL_TIME);
   };
@@ -58,14 +57,14 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
 
   const scrollToZero = () => {
     scrollDistance.value = 0;
-  }
+  };
 
-  watch(viewWrapperRef,()=>{
-    console.log(viewWrapperRef.value);
+  watch(viewWrapperRef, () => {
+    // console.log(viewWrapperRef.value);
     firstObserver = new IntersectionObserver(entries => {
       const isVisible = entries[0].isIntersecting;
       const intersectionRatio = entries[0].intersectionRatio;
-      if(intersectionRatio<0.1){
+      if (intersectionRatio < 0.1) {
         return;
       }
       if (isVisible) {
@@ -84,7 +83,7 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
     lastObserver = new IntersectionObserver(entries => {
       const isVisible = entries[0].isIntersecting;
       const intersectionRatio = entries[0].intersectionRatio;
-      if(intersectionRatio<0.1){
+      if (intersectionRatio < 0.1) {
         return;
       }
       if (isVisible) {
@@ -94,17 +93,22 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
           clearTimeout(scrollTimer.value);
         }
       }
-    },{
+    }, {
       root: viewWrapperRef.value,
       threshold: [0.4],
     });
-  })
+  });
+
+  onUnmounted(() => {
+    firstObserver?.disconnect();
+    lastObserver?.disconnect();
+  });
 
   const initObserver = (node: Element | Component<typeof MCalendarCell> | null, index: number) => {
     if (index === 0) {
       const el = (node as unknown as any)?.$el; // fix this type error
       firstObserver?.observe(el as Element);
-    }else if(index === dateArrRef.value.length - 1){
+    } else if (index === dateArrRef.value.length - 1) {
       const el = (node as unknown as any)?.$el; // fix this type error
       lastObserver?.observe(el as Element);
     }
@@ -117,13 +121,12 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
   return () => {
 
     // console.log(calendarDateInfo.value);
-    // todo 发布lunar 支持农历日期
 
     return <m-border class="m-calendar">
       <div class="m-calendar-header m-calendar-row">
         {
           weekInfo.map((info, i) => (
-            <div>{info}</div>
+            <div class="text-end">{info}</div>
           ))
         }
       </div>

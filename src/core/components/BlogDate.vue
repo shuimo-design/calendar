@@ -80,6 +80,7 @@ const lunarDate = computed<Partial<LunarType>>(() => props.date?.lunar ?? {});
 
 .blog-date {
   color: white;
+  height: 100px;
 }
 
 .blog-date span {

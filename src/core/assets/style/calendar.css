@@ -36,6 +36,7 @@
 }
 
 .m-calendar-cell {
+  position: relative;
   .m-border-main{
     background: unset !important;
     backdrop-filter: unset !important;
