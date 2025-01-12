@@ -17,21 +17,40 @@ const props = defineProps<{
 }>();
 
 
+const toAgenda = () => {
+};
+
+
+
 </script>
 
 <template>
-  <div>
+  <div class="lunar-info" @mousedown="toAgenda">
     <LunarDateInfo :lunar="data.lunar"/>
     <transition>
       <BlogDate v-if="showLunarDate" class="pos-absolute lunar-date" :date="data"/>
-      <span v-else class="m-2 date-span">{{data.month}}-{{ data.day }}</span>
+      <span v-else class="m-2 date-span">{{ data.month }}-{{ data.day }}</span>
     </transition>
   </div>
 </template>
 
 <style scoped>
 
-.lunar-date{
+.lunar-info {
+  height: calc(100% - 11px); /* magic 11 */
+  width: 100%;
+}
+
+
+.agenda-list {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 9999;
+  top: 0;
+}
+
+.lunar-date {
   z-index: 9999;
   /*right: -1.4rem;*/
   right: -0.8rem;
@@ -46,6 +65,9 @@ const props = defineProps<{
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
+}
+
+.m-lunar-info-agenda {
 }
 
 

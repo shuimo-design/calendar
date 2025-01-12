@@ -9,6 +9,10 @@ html,body{
 
 }
 
+html[dark]{
+  color: white;
+}
+
 .m-rice-paper-layout{
   display: flex;
 }

@@ -13,5 +13,6 @@ export default defineConfig({
   rules: [
     ['w-100vw', { width: '100vw' }],
     ['h-100vh', { height: '100vh' }],
+    ['select-none', { userSelect: 'none' }],
   ],
 });

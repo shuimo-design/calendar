@@ -12,6 +12,7 @@
     "@shuimo-design/lunar": "^0.0.7",
     "@vitejs/plugin-vue-jsx": "^4.1.1",
     "dayjs": "^1.11.13",
+    "interactjs": "^1.10.27",
     "shuimo-ui": "npm:shuimo-ui-nightly@latest",
     "unocss": "^0.65.3",
     "vitest": "^2.1.8",

@@ -31,7 +31,7 @@ const monthFirstDay = computed(()=> lunarDate.value?.day===1);
 <template>
 
   <span v-if="newYear" class="year-span">{{lunar?.year}}年</span>
-  <div :class="['lunar-date-info',{'month-first-day':monthFirstDay}]" v-if="lunarDate">
+  <div :class="['lunar-date-info m-2',{'month-first-day':monthFirstDay}]" v-if="lunarDate">
     <span v-if="lunarDate.isLeap">闰</span>
     <span v-if="monthFirstDay">{{ monthZh[lunarDate.month - 1] }}月</span>
     <span>{{ fullDayZh[lunarDate.day - 1] }}</span>

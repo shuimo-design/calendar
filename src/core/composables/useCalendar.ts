@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import { ref, watch } from 'vue';
 import { Options } from './common/defineCore.ts';
 import { lunar, LunarType } from '@shuimo-design/lunar';
+import { AgendaClass } from './agenda/Agenda.class.ts';
 
 export interface CalendarDay {
   day: number;
@@ -20,6 +21,15 @@ export interface CalendarDay {
   lunar?: LunarType;
 }
 
+export interface CalendarAgenda<Info = any> {
+  isStart: boolean;
+  isEnd: boolean;
+  info?: Info;
+  color?: string;
+  level?: number;
+  days?: number;
+}
+
 export const toDayjs = (value: string | Date) => {return dayjs(value);};
 
 // todo 这里的isEmpty可以优化掉
@@ -27,7 +37,7 @@ const isEmpty = (value: string | Date | undefined) => {return value === '' || va
 
 const generateCalendarDate = (options: {
   year: number, month: number, day: number,
-  isCurrentMonth?: boolean, isCurrent?: boolean, needLunar?: boolean
+  isCurrentMonth?: boolean, isCurrent?: boolean, needLunar?: boolean,
 }): CalendarDay => {
   const {
     year, month, day,
@@ -41,14 +51,12 @@ const generateCalendarDate = (options: {
   };
 };
 
-export default function useCalendar(options: Options<{
-  props: {
-    modelValue?: string | Date | undefined,
-  }
+export default function useCalendar<AgendaInfo = any>(options: Options<{
+  props: MCalendarProps<AgendaInfo>
 }>) {
   const currentRef = ref<dayjs.Dayjs>(isEmpty(options.props.modelValue) ? dayjs() : toDayjs(options.props.modelValue));
 
-  const calendarCore = useCalendarCore({ date: currentRef.value });
+  const calendarCore = useCalendarCore({ date: currentRef.value, agenda: options.props.agenda });
 
   watch(() => options.props.modelValue, (value) => {
     currentRef.value = dayjs(value);
@@ -70,23 +78,24 @@ export default function useCalendar(options: Options<{
 }
 
 
-function useCalendarCore(
+function useCalendarCore<AgendaInfo = any>(
   options?: {
     date?: string | Date | dayjs.Dayjs,
-    scrollable?: boolean
+    scrollable?: boolean,
+    agenda?: MCalendarAgenda<AgendaInfo>[];
   },
 ) {
-  const { scrollable = true } = options ?? {};
+  const { scrollable = true, agenda = [] } = options ?? {};
   const CALENDAR_LENGTH = scrollable ? 56 : 42;
   const needLunar: boolean = true;
 
   let currentDayjs: dayjs.Dayjs;
-  let firstDayjs: dayjs.Dayjs;
+  let firstDayjsRef = ref<dayjs.Dayjs>();
   const dateArrRef = ref<CalendarDay[]>([]);
 
   const getCalendar = () => {
     const result: CalendarDay[] = [];
-    let calendarDay = firstDayjs;
+    let calendarDay = firstDayjsRef.value!;
 
     const isCurrent = (cDay: dayjs.Dayjs) => {
       return cDay.year() === currentDayjs.year() &&
@@ -107,6 +116,7 @@ function useCalendarCore(
     }
     dateArrRef.value = result;
   };
+
 
   const init = (date?: string | Date | dayjs.Dayjs) => {
     currentDayjs = dayjs(date || new Date());
@@ -131,7 +141,7 @@ function useCalendarCore(
       subValue++;
     }
 
-    firstDayjs = dateMonthFirstDayWeekSunday.subtract(subValue, 'week');
+    firstDayjsRef.value = dateMonthFirstDayWeekSunday.subtract(subValue, 'week');
 
     getCalendar();
   };
@@ -139,14 +149,14 @@ function useCalendarCore(
 
 
   const unshift = () => {
-    firstDayjs = firstDayjs.subtract(1, 'week');
+    firstDayjsRef.value = firstDayjsRef.value!.subtract(1, 'week');
     getCalendar();
-  }
+  };
 
   const push = () => {
-    firstDayjs = firstDayjs.add(1, 'week');
+    firstDayjsRef.value = firstDayjsRef.value!.add(1, 'week');
     getCalendar();
-  }
+  };
 
 
   return {
@@ -154,6 +164,7 @@ function useCalendarCore(
     getCalendar,
     dateArrRef,
     unshift,
-    push
+    push,
+    firstDayjsRef,
   };
 }

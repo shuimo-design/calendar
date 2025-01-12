@@ -9,15 +9,12 @@
 import { Component, computed, defineComponent, onUnmounted, ref, watch } from 'vue';
 import useCalendar from './composables/useCalendar.ts';
 import MCalendarCell from './components/MCalendarCell.tsx';
-
-type MCalendarProps = {
-  modelValue?: string | Date;
-}
+import MCalendarAgenda from './components/MCalendarAgenda.vue';
 
 export default defineComponent<MCalendarProps>((_props, { slots }) => {
   const props = _props as Required<MCalendarProps>;
 
-  const { getCalendar, dateArrRef, unshift, push } = useCalendar({ props });
+  const { getCalendar, dateArrRef, unshift, push ,firstDayjsRef} = useCalendar({ props });
 
   const weekInfo = ['日', '壹', '贰', '叁', '肆', '伍', '陆'];
 
@@ -132,15 +129,20 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
       </div>
       <m-divider/>
       <div class="m-calendar-view-wrapper" onWheel={onWheel} ref={viewWrapperRef}>
-        <div class="m-calendar-view" style={{ '--transform-y': `${translateY.value}px` }}>
-          {dateArrRef.value.map((cell, i) => {
-            const dom = <MCalendarCell date={cell} ref={el => initObserver(el, i)}>
-              {{
-                default: () => slots.cell?.(cell),
-              }}
-            </MCalendarCell>;
-            return dom;
-          })}
+        <div class="m-calendar-view-scroll-wrapper" style={{ '--transform-y': `${translateY.value}px` }}>
+          <div class="m-calendar-view">
+            {dateArrRef.value.map((cell, i) => {
+              const dom = <MCalendarCell date={cell} ref={el => initObserver(el, i)}>
+                {{
+                  default: () => slots.cell?.(cell),
+                }}
+              </MCalendarCell>;
+              return dom;
+            })}
+          </div>
+          <div class="m-calendar-agenda">
+            <MCalendarAgenda agenda={props.agenda} firstDay={firstDayjsRef.value!}/>
+          </div>
         </div>
       </div>
     </m-border>;
@@ -149,5 +151,6 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
 }, {
   props: {
     modelValue: { type: [String, Date], default: '' },
+    agenda: { type: Array, default: () => [] },
   },
 });
