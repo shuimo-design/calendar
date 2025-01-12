@@ -41,8 +41,6 @@ describe('agenda', async () => {
     console.log(agendaClass.getOneWeekAndGoNext());
     console.log(agendaClass.getOneWeekAndGoNext());
 
-
-
   });
 
 });

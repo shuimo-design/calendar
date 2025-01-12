@@ -11,7 +11,7 @@
 import { computed } from 'vue';
 
 const props = defineProps<{
-  agenda: MCalendarAgenda
+  agenda: MCalendarAgenda & { groupInfo: [number, number, number] };
 }>();
 
 const startDay = computed(() => props.agenda.startDay ?? 0);
@@ -23,7 +23,7 @@ const end = computed(() => endDay.value <= 0);
 const style = computed(() => ({
   '--m-calendar-agenda-color': props.agenda.color,
   width: `${(props.agenda.days ?? 7) / 7 * 100}%`,
-  marginLeft: `${Math.max(startDay.value, 0) / 7 * 100}%`,
+  marginLeft: `${props.agenda.groupInfo[0]/ 7 * 100}%`,
 }));
 
 </script>
