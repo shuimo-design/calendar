@@ -6,7 +6,7 @@
  *
  * 江湖的业务千篇一律，复杂的代码好几百行。
  */
-import { Component, computed, nextTick, onUnmounted, ref, watch } from 'vue';
+import { Component, computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import MCalendarCell from '../../components/MCalendarCell.tsx';
 import useCalendar from '../useCalendar.ts';
 
@@ -92,12 +92,6 @@ export default function useCalendarScroll(options: ReturnType<typeof useCalendar
     lastObserver.observe(observerElements.value[1]);
   });
 
-  onUnmounted(() => {
-    firstObserver?.disconnect();
-    lastObserver?.disconnect();
-  });
-
-
   const initObserver = (node: Element | Component<typeof MCalendarCell> | null, index: number) => {
     if (index === 0) {
       if (observerElements.value[0]) {
@@ -114,9 +108,8 @@ export default function useCalendarScroll(options: ReturnType<typeof useCalendar
 
       // get dom height
       nextTick(() => {
-        const height = el?.getBoundingClientRect().height;
-        domSizeRef.value = height;
-      });
+        setDomSize(el);
+      }).then();
 
     } else if (index === dateArrRef.value.length - 1) {
       if (observerElements.value[1]) {
@@ -132,6 +125,27 @@ export default function useCalendarScroll(options: ReturnType<typeof useCalendar
       }
     }
   };
+
+
+  const setDomSize = (el?: Element) => {
+    if (el) {
+      domSizeRef.value = el.getBoundingClientRect().height;
+    }
+  }
+  const onResize = () => {
+    setDomSize(observerElements.value[0])
+  }
+
+  onMounted(() => {
+    window.addEventListener('resize', onResize);
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', onResize);
+    firstObserver?.disconnect();
+    lastObserver?.disconnect();
+  });
+
 
   return {
     onWheel,
