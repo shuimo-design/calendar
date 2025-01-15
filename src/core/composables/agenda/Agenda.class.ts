@@ -9,7 +9,7 @@
 import dayjs from 'dayjs';
 
 const compareDate = (date1: Date, date2: Date) => {
-  return dayjs(dayjs(date1).format('YYYY-MM-DD')).diff(dayjs(date2).format('YYYY-MM-DD'),'days');
+  return dayjs(dayjs(date1).format('YYYY-MM-DD')).diff(dayjs(date2).format('YYYY-MM-DD'), 'days');
 };
 
 const maxDay = (date1: Date, date2: Date) => {
@@ -22,7 +22,7 @@ const minDay = (date1: Date, date2: Date) => {
   const date1Js = dayjs(dayjs(date1).format('YYYY-MM-DD'));
   const date2Js = dayjs(dayjs(date2).format('YYYY-MM-DD'));
   return date1Js.diff(date2Js) < 0 ? date1 : date2;
-}
+};
 
 export class AgendaClass<T = any> {
 
@@ -42,6 +42,7 @@ export class AgendaClass<T = any> {
         ...item,
         start: new Date(item.start),
         end: new Date(item.end),
+        children: [],
       }))
       .sort((a, b) => a.start.getTime() - b.start.getTime());
 
@@ -73,9 +74,9 @@ export class AgendaClass<T = any> {
 
     const lastDay = dayjs(this.currentDate).add(6, 'day').toDate();
 
-    for(let i = 0; i < this.leftAgenda.length; i++) {
+    for (let i = 0; i < this.leftAgenda.length; i++) {
       const item = this.leftAgenda[i];
-      if (compareDate(maxDay(item.start, this.currentDate), minDay(item.end, lastDay))<=0) {
+      if (compareDate(maxDay(item.start, this.currentDate), minDay(item.end, lastDay)) <= 0) {
         this.currentActiveAgenda.push({
           ...item,
           level: this.level++,
@@ -86,37 +87,57 @@ export class AgendaClass<T = any> {
     }
 
 
-    const agenda: MCalendarAgendaType<T, Date>[] = [];
+    const agendas: AgendaInfoType<T, Date>[] = [];
 
     for (let i = 0; i < this.currentActiveAgenda.length; i++) {
       const item = this.currentActiveAgenda[i];
 
 
       // 摆烂，先这样
-      const days = dayjs(dayjs(Math.min(item.end.getTime(), lastDay.getTime())).format('YYYY-MM-DD'))
-        .diff(dayjs(Math.max(item.start.getTime(), this.currentDate.getTime())).format('YYYY-MM-DD'), 'day') + 1 ;
+      const daysCount = dayjs(dayjs(Math.min(item.end.getTime(), lastDay.getTime())).format('YYYY-MM-DD'))
+        .diff(dayjs(Math.max(item.start.getTime(), this.currentDate.getTime())).format('YYYY-MM-DD'), 'day') + 1;
 
 
-      if (compareDate(item.end,lastDay)<=0) {
+      if (compareDate(item.end, lastDay) <= 0) {
         this.currentActiveAgenda.splice(i, 1);
         i--;
         this.level--;
       }
 
-      agenda.push({
-        ...item,
-        startDay: compareDate(item.start,this.currentDate),
-        endDay: compareDate(item.end,lastDay),
-        days:Math.min(days,7),
-      });
+      const startDay = compareDate(item.start, this.currentDate);
+      const endDay = compareDate(item.end, lastDay);
+      const days = Math.min(daysCount, 7);
+
+      const agenda: AgendaInfoType<T, Date> = {
+        start: item.start,
+        end: item.end,
+        info: item.info,
+        color: item.color,
+        level: item.level,
+        startDay,
+        endDay,
+        days,
+        parent: item,
+        isActive: false,
+        operator: false,
+        isNew: false,
+        groupInfo: [
+          Math.max(startDay ?? 0, 0), // 第几天开始
+          Math.min(days, 7),  // 持续几天
+          Math.max(0 - (endDay ?? 0), 0), // 还剩几天
+        ]
+      };
+
+      item.children.push(agenda);
+
+      agendas.push(agenda);
     }
 
 
     this.currentDate = dayjs(this.currentDate).add(7, 'day').toDate();
 
 
-
-    return agenda;
+    return agendas;
   }
 
 }

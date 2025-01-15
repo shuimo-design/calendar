@@ -9,10 +9,6 @@
 
 
 
-// 题目所说的复合类型
-export type AgendaInfo = MCalendarAgendaType & {
-  groupInfo: [number, number, number]; // [x, y, z]
-};
 
 /**
  * =======================
@@ -26,7 +22,7 @@ export type AgendaInfo = MCalendarAgendaType & {
  * @param b AgendaInfo
  * @returns true 表示冲突，false 表示无冲突
  */
-function isConflict(a: AgendaInfo, b: AgendaInfo): boolean {
+function isConflict(a: AgendaInfoType, b: AgendaInfoType): boolean {
   const [x1, y1] = a.groupInfo;
   const [x2, y2] = b.groupInfo;
 
@@ -57,7 +53,7 @@ function isConflict(a: AgendaInfo, b: AgendaInfo): boolean {
 /**
  * 获取某组内“最晚结束”的那一天（即最大的 end = x+y-1）
  */
-function getGroupMaxEndDay(group: AgendaInfo[]): number {
+function getGroupMaxEndDay(group: AgendaInfoType[]): number {
   let maxEnd = -Infinity;
   for (const gItem of group) {
     const [x, y] = gItem.groupInfo;
@@ -75,7 +71,7 @@ function getGroupMaxEndDay(group: AgendaInfo[]): number {
  * @param newItem 待加入的新 AgendaInfo
  * @returns 一个新的 AgendaInfo（或者你也可以直接改 newItem）
  */
-function offsetTriple(group: AgendaInfo[], newItem: AgendaInfo): AgendaInfo {
+function offsetTriple(group: AgendaInfoType[], newItem: AgendaInfoType): AgendaInfoType {
   // 找到该组内“最晚结束”的 day
   const maxEndDay = getGroupMaxEndDay(group); // 比如 1+5-1=5
   // newItem 原始 [x2, y2, z2]
@@ -100,11 +96,13 @@ function offsetTriple(group: AgendaInfo[], newItem: AgendaInfo): AgendaInfo {
   //   - 或者你要做某种剩余计算，都行
   const newZ = 0;
 
-  const modified = {
-    ...newItem,
-    groupInfo: [newX, y2, newZ] as [number, number, number],
-  };
-  return modified;
+  // const modified = {
+  //   ...newItem,
+  //   groupInfo: [newX, y2, newZ] as [number, number, number],
+  // };
+
+  newItem.groupInfo = [newX, y2, newZ] as [number, number, number];
+  return newItem;
 }
 
 /**
@@ -114,8 +112,8 @@ function offsetTriple(group: AgendaInfo[], newItem: AgendaInfo): AgendaInfo {
  * 当我们发现某个 item 可以加入已存在的 group 时，
  * 就把它“贴紧”该组的末尾。
  */
-export function groupAgendaInfo(agendaList: AgendaInfo[]): AgendaInfo[][] {
-  const result: AgendaInfo[][] = [];
+export function groupAgendaInfo(agendaList: AgendaInfoType[]): AgendaInfoType[][] {
+  const result: AgendaInfoType[][] = [];
 
   for (const item of agendaList) {
     let placed = false;

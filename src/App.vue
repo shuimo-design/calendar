@@ -12,12 +12,13 @@ const agendaList = [
   { start: '2025-01-11', end: '2025-01-12', info: { msg: '休息日' } ,color:'#2A6E3F'},
   { start: '2025-01-18', end: '2025-01-19', info: { msg: '休息日' } ,color:'#2A6E3F'},
   { start: '2025-01-27', end: '2025-02-4', info: { msg: '春节（休）' } ,color:'#2A6E3F'},
-  { start: '2025-01-20', end: '2025-01-26', info: { msg: '工作日' } ,color:'#822327'},
-  { start: '2025-01-06', end: '2025-01-10', info: { msg: '工作日' },color:'#822327' },
-  { start: '2025-01-13', end: '2025-01-17', info: { msg: '工作日' } ,color:'#822327'},
+  { start: '2025-01-20', end: '2025-01-26', info: { msg: '工作日' } ,color:'#3D8E86'},
+  { start: '2025-01-06', end: '2025-01-10', info: { msg: '工作日' },color:'#3D8E86' },
+  { start: '2025-01-13', end: '2025-01-17', info: { msg: '工作日' } ,color:'#3D8E86'},
   { start: '2024-12-28', end: '2025-01-15', info: { msg: '日历开发周期' },color:'#615EA8' },
-  { start: '2025-01-12', end: '2025-01-12', info: { msg: '芋头煲仔饭' } ,color:'#FAC03D'},
-  { start: '2025-01-10', end: '2025-01-26', info: { msg: '食谱开发周期' } ,color:'#420B2F'},
+  { start: '2025-01-15', end: '2025-01-24', info: { msg: '水墨迭代' },color:'var(--m-color-main)' },
+  // { start: '2025-01-12', end: '2025-01-12', info: { msg: '芋头煲仔饭' } ,color:'#FAC03D'},
+  // { start: '2025-01-10', end: '2025-01-26', info: { msg: '食谱开发周期' } ,color:'#420B2F'},
 ];
 </script>
 

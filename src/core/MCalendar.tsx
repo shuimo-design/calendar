@@ -6,118 +6,34 @@
  *
  * 江湖的业务千篇一律，复杂的代码好几百行。
  */
-import { Component, computed, defineComponent, onUnmounted, ref, watch } from 'vue';
+import { computed, defineComponent, withMemo } from 'vue';
 import useCalendar from './composables/useCalendar.ts';
 import MCalendarCell from './components/MCalendarCell.tsx';
 import MCalendarAgenda from './components/MCalendarAgenda.vue';
+import useCalendarScroll from './composables/calendar/useCalendarScroll.ts';
 
 export default defineComponent<MCalendarProps>((_props, { slots }) => {
   const props = _props as Required<MCalendarProps>;
 
-  const { getCalendar, dateArrRef, unshift, push ,firstDayjsRef} = useCalendar({ props });
+  const calendarHandler = useCalendar({ props });
+  const {
+    getCalendar, dateArrRef,
+    firstDayjsRef,
+  } = calendarHandler;
 
   const weekInfo = ['日', '壹', '贰', '叁', '肆', '伍', '陆'];
 
+  const {
+    onWheel,
+    viewWrapperRef,
+    translateY,
+    initObserver,
+  } = useCalendarScroll(calendarHandler);
 
-  // ---------------------
+  const wrapperStyle = computed(() => ({ '--transform-y': `${translateY.value}px` }));
 
-  const scrollTimer = ref<number | null>(null);
-  const SCROLL_TIME = 300;
-  const scrollDistance = ref(0);
-  const moveDistance = ref(0);
-  const translateY = computed(() => scrollDistance.value + moveDistance.value);
-
-  const scrollTimeout = () => {
-    if (scrollTimer.value) {
-      clearTimeout(scrollTimer.value);
-    }
-    // scrollTimer.value = setTimeout(() => {
-    //   scrollDistance.value = 0;
-    // }, SCROLL_TIME);
-  };
-
-  const onWheel = (e: WheelEvent) => {
-    // console.log(scrollDistance.value);
-    const { deltaY } = e;
-    if (deltaY < 0) {
-      scrollDistance.value += deltaY;
-      // 向上滚动
-    } else {
-      scrollDistance.value += deltaY;
-    }
-    scrollTimeout();
-  };
-
-  const viewWrapperRef = ref<HTMLElement | null>(null);
-  let firstObserver: IntersectionObserver | null = null;
-  let lastObserver: IntersectionObserver | null = null;
-
-  const scrollToZero = () => {
-    scrollDistance.value = 0;
-  };
-
-  watch(viewWrapperRef, () => {
-    // console.log(viewWrapperRef.value);
-    firstObserver = new IntersectionObserver(entries => {
-      const isVisible = entries[0].isIntersecting;
-      const intersectionRatio = entries[0].intersectionRatio;
-      if (intersectionRatio < 0.1) {
-        return;
-      }
-      if (isVisible) {
-        unshift();
-        scrollToZero();
-        if (scrollTimer.value) {
-          clearTimeout(scrollTimer.value);
-        }
-      }
-    }, {
-      root: viewWrapperRef.value,
-      threshold: [0.4],
-    });
-
-
-    lastObserver = new IntersectionObserver(entries => {
-      const isVisible = entries[0].isIntersecting;
-      const intersectionRatio = entries[0].intersectionRatio;
-      if (intersectionRatio < 0.1) {
-        return;
-      }
-      if (isVisible) {
-        push();
-        scrollToZero();
-        if (scrollTimer.value) {
-          clearTimeout(scrollTimer.value);
-        }
-      }
-    }, {
-      root: viewWrapperRef.value,
-      threshold: [0.4],
-    });
-  });
-
-  onUnmounted(() => {
-    firstObserver?.disconnect();
-    lastObserver?.disconnect();
-  });
-
-  const initObserver = (node: Element | Component<typeof MCalendarCell> | null, index: number) => {
-    if (index === 0) {
-      const el = (node as unknown as any)?.$el; // fix this type error
-      firstObserver?.observe(el as Element);
-    } else if (index === dateArrRef.value.length - 1) {
-      const el = (node as unknown as any)?.$el; // fix this type error
-      lastObserver?.observe(el as Element);
-    }
-  };
-
-
-  // ---------------------
-
-
+  const memoCache: any[] = [];
   return () => {
-
-    // console.log(calendarDateInfo.value);
 
     return <m-border class="m-calendar">
       <div class="m-calendar-header m-calendar-row">
@@ -129,16 +45,18 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
       </div>
       <m-divider/>
       <div class="m-calendar-view-wrapper" onWheel={onWheel} ref={viewWrapperRef}>
-        <div class="m-calendar-view-scroll-wrapper" style={{ '--transform-y': `${translateY.value}px` }}>
+        <div class="m-calendar-view-scroll-wrapper" style={wrapperStyle.value}>
           <div class="m-calendar-view">
-            {dateArrRef.value.map((cell, i) => {
-              const dom = <MCalendarCell date={cell} ref={el => initObserver(el, i)}>
-                {{
-                  default: () => slots.cell?.(cell),
-                }}
-              </MCalendarCell>;
-              return dom;
-            })}
+            {withMemo(dateArrRef.value, () => {
+              return <>{
+                dateArrRef.value.map((cell, i) => {
+                  const dom = <MCalendarCell date={cell} ref={el => initObserver(el, i)}>
+                    {{ default: () => slots.cell?.(cell) }}
+                  </MCalendarCell>;
+                  return dom;
+                })
+              }</>;
+            }, memoCache, 0)}
           </div>
           <div class="m-calendar-agenda">
             <MCalendarAgenda agenda={props.agenda} firstDay={firstDayjsRef.value!}/>
