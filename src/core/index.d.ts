@@ -13,6 +13,7 @@ type RequiredParams<T, Params extends keyof T> = Partial<T> & Required<Pick<T, P
 type MCalendarProps<AgendaInfo = any> = {
   modelValue?: string | Date;
   agenda?: MCalendarAgenda<AgendaInfo>[];
+  type?: 'year' | 'month' | 'week' | 'day'
 }
 
 /**
@@ -51,7 +52,7 @@ type MCalendarAgendaResType<AgendaInfo = any, DateType = Date | string> = MCalen
   parent: MCalendarAgendaType<AgendaInfo, DateType>
 }
 
-type AgendaInfoType<AgendaInfo = any, DateType = Date | string> = MCalendarAgendaResType<AgendaInfo,DateType> & {
+type AgendaInfoType<AgendaInfo = any, DateType = Date | string> = MCalendarAgendaResType<AgendaInfo, DateType> & {
   isActive: boolean;
   operator: boolean;
   isNew: boolean;

@@ -16,3 +16,11 @@ html[dark]{
 .m-rice-paper-layout{
   display: flex;
 }
+
+.m-switch{
+  display: inline-block;
+}
+
+.m-radio-group{
+  display: inline-block;
+}

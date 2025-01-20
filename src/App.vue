@@ -20,6 +20,13 @@ const agendaList = [
   // { start: '2025-01-12', end: '2025-01-12', info: { msg: '芋头煲仔饭' } ,color:'#FAC03D'},
   // { start: '2025-01-10', end: '2025-01-26', info: { msg: '食谱开发周期' } ,color:'#420B2F'},
 ];
+enum CALENDAR_TYPE {
+  YEAR = 'year',
+  MONTH = 'month',
+  WEEK = 'week',
+  DAY = 'day',
+}
+const calendarType = ref<CALENDAR_TYPE>(CALENDAR_TYPE.YEAR)
 </script>
 
 <template>
@@ -27,11 +34,17 @@ const agendaList = [
   <m-rice-paper layout="full-screen">
     <div class="flex flex-col justify-center flex-items-center w-100vw h-100vh">
 
-      <m-switch active-info="干支纪日法" inactive-info="公历纪日法" v-model="showLunarDateRef" />
+      <div>
+        <m-switch active-info="干支纪日法" inactive-info="公历纪日法" v-model="showLunarDateRef" />
+        <m-radio-group v-model="calendarType">
+          <m-radio value="year">年</m-radio>
+          <m-radio value="month">月</m-radio>
+        </m-radio-group>
+      </div>
 
       <div class="wrapper">
-        <MCalendar v-model="dateRef" :agenda="agendaList">
-          <template #cell="data">
+        <MCalendar v-model="dateRef" :agenda="agendaList" :type="calendarType">
+          <template #month-cell="data">
             <LunarInfo :show-lunar-date="showLunarDateRef" :data="data"/>
           </template>
         </MCalendar>

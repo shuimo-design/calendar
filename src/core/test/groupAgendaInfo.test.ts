@@ -7,7 +7,7 @@
  * 江湖的业务千篇一律，复杂的代码好几百行。
  */
 import { describe, it } from 'vitest';
-import { groupAgendaInfo } from '../composables/agenda/groupAgendaInfo.ts';
+import { groupAgendaInfo } from '../model/month/composables/agenda/groupAgendaInfo.ts';
 
 describe('group agenda info', () => {
 

@@ -1,5 +1,5 @@
 /**
- * @description
+ * @description monty calendar hook
  * @author 阿怪
  * @date 2025/1/6 00:37
  * @version v1.0.0
@@ -8,9 +8,10 @@
  */
 import dayjs from 'dayjs';
 import { ref, watch } from 'vue';
-import { Options } from './common/defineCore.ts';
+import { Options } from '../../../composables/common/defineCore.ts';
 import { lunar, LunarType } from '@shuimo-design/lunar';
 import { AgendaClass } from './agenda/Agenda.class.ts';
+import useCommonCalendar, { getCommonCalendar } from '../../../composables/useCommonCalendar.ts';
 
 export interface CalendarDay {
   day: number;
@@ -19,6 +20,12 @@ export interface CalendarDay {
   isCurrentMonth: boolean;
   isCurrent?: boolean;
   lunar?: LunarType;
+}
+
+export interface CalendarMonth {
+  days:CalendarDay[];
+  month:number;
+  year:number;
 }
 
 export interface CalendarAgenda<Info = any> {
@@ -32,44 +39,15 @@ export interface CalendarAgenda<Info = any> {
 
 export const toDayjs = (value: string | Date) => {return dayjs(value);};
 
-// todo 这里的isEmpty可以优化掉
-const isEmpty = (value: string | Date | undefined) => {return value === '' || value === undefined;};
 
-const generateCalendarDate = (options: {
-  year: number, month: number, day: number,
-  isCurrentMonth?: boolean, isCurrent?: boolean, needLunar?: boolean,
-}): CalendarDay => {
-  const {
-    year, month, day,
-    isCurrentMonth = false, isCurrent = false, needLunar = true,
-  } = options;
-  return {
-    year, month, day,
-    isCurrentMonth: isCurrentMonth,
-    isCurrent: isCurrent,
-    lunar: needLunar ? lunar(`${year}-${month}-${day}`) : undefined,
-  };
-};
 
-export default function useCalendar<AgendaInfo = any>(options: Options<{
+
+export default function useMonthCalendar<AgendaInfo = any>(options: Options<{
   props: MCalendarProps<AgendaInfo>
 }>) {
-  const currentRef = ref<dayjs.Dayjs>(isEmpty(options.props.modelValue) ? dayjs() : toDayjs(options.props.modelValue));
+  const { currentRef } = useCommonCalendar(options);
 
-  const calendarCore = useCalendarCore({ date: currentRef.value, agenda: options.props.agenda });
-
-  watch(() => options.props.modelValue, (value) => {
-    currentRef.value = dayjs(value);
-    // init(currentRef.value);
-
-    /**
-     * 初始化完了，修改的时候，要看是哪种模式
-     * 如果是日历模式的话，应该用滚动逻辑，滚动逻辑还要看日期是否太远了，太远了就重新渲染
-     * 如果是日期选择器模式的话，直接重新渲染即可
-     */
-
-
-  });
+  const calendarCore = useMonthCalendarCore({ date: currentRef.value, agenda: options.props.agenda });
 
   return {
     ...calendarCore,
@@ -78,7 +56,7 @@ export default function useCalendar<AgendaInfo = any>(options: Options<{
 }
 
 
-function useCalendarCore<AgendaInfo = any>(
+export function useMonthCalendarCore<AgendaInfo = any>(
   options?: {
     date?: string | Date | dayjs.Dayjs,
     scrollable?: boolean,
@@ -94,27 +72,12 @@ function useCalendarCore<AgendaInfo = any>(
   const dateArrRef = ref<CalendarDay[]>([]);
 
   const getCalendar = () => {
-    const result: CalendarDay[] = [];
-    let calendarDay = firstDayjsRef.value!;
-
-    const isCurrent = (cDay: dayjs.Dayjs) => {
-      return cDay.year() === currentDayjs.year() &&
-        cDay.month() === currentDayjs.month() &&
-        cDay.date() === currentDayjs.date();
-    };
-
-    for (let i = 0; i < CALENDAR_LENGTH; i++) {
-      result.push(generateCalendarDate({
-        year: calendarDay.year(),
-        month: calendarDay.month() + 1,
-        day: calendarDay.date(),
-        isCurrentMonth: calendarDay.month() === currentDayjs.month(),
-        isCurrent: isCurrent(calendarDay),
-        needLunar,
-      }));
-      calendarDay = calendarDay.add(1, 'day');
-    }
-    dateArrRef.value = result;
+    dateArrRef.value =  getCommonCalendar({
+      firstDayjsRef,
+      currentDayjs,
+      CALENDAR_LENGTH,
+      needLunar,
+    })
   };
 
 

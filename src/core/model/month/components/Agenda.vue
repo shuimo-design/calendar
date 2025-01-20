@@ -82,7 +82,7 @@ const inactiveAgenda = () => {toggleActive(false);};
 .m-calendar-agenda-main {
   flex: 1;
   height: 20px;
-  mask-image: url('../assets/svg/main.svg');
+  mask-image: url('../../../assets/svg/main.svg');
   background-color: var(--m-calendar-agenda-color);
   mask-repeat: repeat-x;
 
@@ -91,13 +91,13 @@ const inactiveAgenda = () => {toggleActive(false);};
 
 .m-calendar-agenda-left {
   aspect-ratio: 330/121;
-  mask-image: url('../assets/svg/left.svg');
+  mask-image: url('../../../assets/svg/left.svg');
   background-repeat: no-repeat;
 }
 
 .m-calendar-agenda-right {
   aspect-ratio: 129/119;
-  mask-image: url('../assets/svg/right.svg');
+  mask-image: url('../../../assets/svg/right.svg');
   background-repeat: no-repeat;
 }
 
@@ -105,6 +105,7 @@ const inactiveAgenda = () => {toggleActive(false);};
   position: absolute;
   color: white;
   line-height: 20px;
+  padding-left: 4px;
 }
 
 </style>

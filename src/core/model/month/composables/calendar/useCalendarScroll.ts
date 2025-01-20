@@ -7,10 +7,10 @@
  * 江湖的业务千篇一律，复杂的代码好几百行。
  */
 import { Component, computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
-import MCalendarCell from '../../components/MCalendarCell.tsx';
-import useCalendar from '../useCalendar.ts';
+import MCalendarCell from '../../components/MCalendarMonthCell.tsx';
+import { CalendarHookRes } from '../../../../composables/useCommonCalendar.ts';
 
-export default function useCalendarScroll(options: ReturnType<typeof useCalendar>) {
+export default function useCalendarScroll(options: CalendarHookRes) {
 
   const { push, unshift, dateArrRef } = options;
 
@@ -36,7 +36,7 @@ export default function useCalendarScroll(options: ReturnType<typeof useCalendar
       if (deltaY < 0) {
         deltaY = Math.max(-domSizeRef.value / 2, deltaY);
         scrollDistance.value += deltaY;
-        scrollDistance.value = Math.max(scrollDistance.value,-domSizeRef.value);
+        scrollDistance.value = Math.max(scrollDistance.value, -domSizeRef.value);
         // 向上滚动
       } else {
         deltaY = Math.min(domSizeRef.value / 2, deltaY);
@@ -56,7 +56,6 @@ export default function useCalendarScroll(options: ReturnType<typeof useCalendar
   };
 
   const handleObserver = (entries: IntersectionObserverEntry[], func: () => void) => {
-
     const isVisible = entries[0].isIntersecting;
     const intersectionRatio = entries[0].intersectionRatio;
     if (intersectionRatio < 0.1) {
@@ -131,14 +130,14 @@ export default function useCalendarScroll(options: ReturnType<typeof useCalendar
     if (el) {
       domSizeRef.value = el.getBoundingClientRect().height;
     }
-  }
+  };
   const onResize = () => {
-    setDomSize(observerElements.value[0])
-  }
+    setDomSize(observerElements.value[0]);
+  };
 
   onMounted(() => {
     window.addEventListener('resize', onResize);
-  })
+  });
 
   onUnmounted(() => {
     window.removeEventListener('resize', onResize);
@@ -146,12 +145,13 @@ export default function useCalendarScroll(options: ReturnType<typeof useCalendar
     lastObserver?.disconnect();
   });
 
+  const wrapperStyle = computed(() => ({ '--transform-y': `${translateY.value}px` }));
 
   return {
     onWheel,
     viewWrapperRef,
-    translateY,
     initObserver,
+    wrapperStyle,
   };
 
 }

@@ -8,7 +8,7 @@
  * 江湖的业务千篇一律，复杂的代码好几百行。
  */
 import { computed } from 'vue';
-import { CalendarDay } from '../composables/useCalendar.ts';
+import { CalendarDay } from '../composables/useMonthCalendar.ts';
 import { LunarType } from '@shuimo-design/lunar';
 
 const props = defineProps<{
@@ -91,7 +91,7 @@ const lunarDate = computed<Partial<LunarType>>(() => props.date?.lunar ?? {});
 .blog-date-month, .blog-date-day {
   --m-blog-date-from: var(--m-color-main);
   --m-blog-date-to: var(--m-color-warn);
-  mask-image: url(../assets/img/seal.png);
+  mask-image: url(../../../assets/img/seal.png);
   mask-size: 100% 100%;
   background: linear-gradient(to bottom, var(--m-blog-date-from), var(--m-blog-date-to));
   padding: 0.8rem 0.4rem;

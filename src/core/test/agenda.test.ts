@@ -9,16 +9,16 @@
 
 
 import { describe, it } from 'vitest';
-import useCalendar from '../composables/useCalendar.ts';
+import useMonthCalendar from '../model/month/composables/useMonthCalendar.ts';
 import dayjs from 'dayjs';
-import { AgendaClass } from '../composables/agenda/Agenda.class.ts';
+import { AgendaClass } from '../model/month/composables/agenda/Agenda.class.ts';
 
 describe('agenda', async () => {
 
 
   it('test', () => {
 
-    const {dateArrRef} = useCalendar({props:{modelValue:'2025-01-12',agenda:[]}});
+    const {dateArrRef} = useMonthCalendar({props:{modelValue:'2025-01-12',agenda:[]}});
     const dateInfo = dateArrRef.value.map(date=>
       dayjs(date.year+'-'+date.month+'-'+date.day).toDate()
     );

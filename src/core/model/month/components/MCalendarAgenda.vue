@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import { ref, watchEffect } from 'vue';
 import { AgendaClass } from '../composables/agenda/Agenda.class.ts';
 import Agenda from './Agenda.vue';
-import { groupAgendaInfo } from '../composables/agenda/gruopAgendaInfo.ts';
+import { groupAgendaInfo } from '../composables/agenda/groupAgendaInfo.ts';
 
 const props = defineProps<{
   agenda: MCalendarAgenda[];
@@ -29,7 +29,6 @@ const agendasList = ref<AgendaInfoType[][][]>([]);
 
 watchEffect(() => {
   const agenda = new AgendaClass(props.agenda, props.firstDay.toDate());
-
   const list = [];
   list.push(getWeek(agenda));
   list.push(getWeek(agenda));
@@ -39,8 +38,6 @@ watchEffect(() => {
   list.push(getWeek(agenda));
   list.push(getWeek(agenda));
   list.push(getWeek(agenda));
-
-
   agendasList.value = list;
 });
 
@@ -55,14 +52,11 @@ const toToggleActive = (indexInfo: { gIndex: number, aListIndex: number, aIndex:
 </script>
 
 <template>
-
-
   <div class="m-calendar-agenda-row" v-for="(groups,gIndex) in agendasList">
     <div v-for="(agendas,aListIndex) in groups">
       <Agenda :agenda="agenda" v-for="(agenda,aIndex) in agendas" @toggleActive="isActive=>toToggleActive({gIndex,aListIndex,aIndex},isActive)"/>
     </div>
   </div>
-
 </template>
 
 <style scoped>

@@ -1,3 +1,5 @@
+@import "calendar-year.css";
+
 :root {
   --m-calendar-w: 100%;
   --m-calendar-h: 100%;
@@ -5,6 +7,9 @@
   --m-calendar-main-h: calc(var(--m-calendar-h) - var(--m-calendar-header) - 5px);
 
   --transform-y: 0;
+
+  --m-calendar-view-rows: 6;
+
 }
 
 .m-calendar {
@@ -20,10 +25,11 @@
 }
 
 .m-calendar-view-scroll-wrapper{
+  --m-calendar-view-total-rows: calc(var(--m-calendar-view-rows) + 2);
   display: grid;
   grid-template-areas: "main";
-  height: calc(100% / 6 * 8);
-  transform: translateY(calc(-100% / 8 - var(--transform-y)));
+  height: calc(100% / var(--m-calendar-view-rows) * var(--m-calendar-view-total-rows));
+  transform: translateY(calc(-100% / var(--m-calendar-view-total-rows) - var(--transform-y)));
 }
 
 .m-calendar-view {
@@ -67,3 +73,4 @@
   }
   /*height: calc(var(--m-calendar-main-h) / 7);*/
 }
+
