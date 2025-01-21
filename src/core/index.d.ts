@@ -13,7 +13,8 @@ type RequiredParams<T, Params extends keyof T> = Partial<T> & Required<Pick<T, P
 type MCalendarProps<AgendaInfo = any> = {
   modelValue?: string | Date;
   agenda?: MCalendarAgenda<AgendaInfo>[];
-  type?: 'year' | 'month' | 'week' | 'day'
+  type?: 'year' | 'month' | 'week' | 'day',
+  border?: boolean | {top?:boolean,right?:boolean,bottom?:boolean,left?:boolean};
 }
 
 /**

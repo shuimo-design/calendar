@@ -10,12 +10,13 @@ import { MCOPO, MPropType } from './types/props';
 
 
 // 暂时不用，不然会报警告
-export const typedProps: MCOPO<Omit<MCalendarProps, 'type'>> = {
+export const typedProps: MCOPO<Omit<MCalendarProps, 'type' | 'border'>> = {
   modelValue: { type: [String, Date], default: '' },
   agenda: { type: Array, default: () => [] },
 };
 
 export const props: MCOPO<MCalendarProps> = {
   ...typedProps,
+  border: { type: [Boolean, Object] as MPropType<boolean | { top?: boolean, bottom?: boolean, right?: boolean, left?: boolean }>, default: true },
   type: { type: String as MPropType<'year' | 'month' | 'week' | 'day'>, default: 'month' },
 };

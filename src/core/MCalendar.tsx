@@ -15,7 +15,7 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
   const props = _props as Required<MCalendarProps>;
 
   return () => {
-    return <m-border class={['m-calendar',`m-calendar-${props.type}`]}>
+    return <m-border border={props.border} class={['m-calendar',`m-calendar-${props.type}`]}>
       {
         () => {
           if (_props.type === 'month') {
