@@ -10,7 +10,7 @@ import { Component, computed, nextTick, onMounted, onUnmounted, ref, watch } fro
 import MCalendarCell from '../../components/MCalendarMonthCell.tsx';
 import { CalendarHookRes } from '../../../../composables/useCommonCalendar.ts';
 
-export default function useCalendarScroll(options: CalendarHookRes) {
+export default function useCalendarScroll<T=any>(options: CalendarHookRes<T>) {
 
   const { push, unshift, dateArrRef } = options;
 

@@ -58,7 +58,7 @@ const generateCalendarDate = (options: {
 };
 
 export const getCommonCalendar = (options: {
-  firstDayjsRef:  Ref<dayjs.Dayjs | undefined, dayjs.Dayjs | undefined>,
+  firstDayjsRef: Ref<dayjs.Dayjs | undefined, dayjs.Dayjs | undefined>,
   currentDayjs: dayjs.Dayjs,
   CALENDAR_LENGTH: number,
   needLunar: boolean
@@ -95,8 +95,8 @@ export const getCommonCalendar = (options: {
 };
 
 
-export type CalendarHookRes<T> = {
-  push: ()=>void;
-  pop: ()=>void;
-  dataArrRef: Ref<T[]>;
+export type CalendarHookRes<T = any> = {
+  push: () => void;
+  unshift: () => void;
+  dateArrRef: Ref<T[]>;
 }
