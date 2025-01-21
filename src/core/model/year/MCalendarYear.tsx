@@ -7,7 +7,7 @@
  * 江湖的业务千篇一律，复杂的代码好几百行。
  */
 import { defineComponent, withMemo } from 'vue';
-import { typedProps } from '../../props.ts';
+import { props, typedProps } from '../../props.ts';
 import useYearCalendar from './composables/useYearCalendar.ts';
 import MCalendarYearCell from './components/MCalendarYearCell.tsx';
 import useCalendarScroll from '../month/composables/calendar/useCalendarScroll.ts';
@@ -30,7 +30,7 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
   const memoCache: any[] = [];
 
   return () => {
-    return <m-border class={['m-calendar', 'm-calendar-year']}>
+    return <>
       {/*<div class="m-calendar-header m-calendar-row">*/}
       {/*  <span class="year-info">{currentRef.value.year()}年</span>*/}
       {/*</div>*/}
@@ -38,24 +38,22 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
         <div class="m-calendar-view-scroll-wrapper m-calendar-year-view" style={wrapperStyle.value}>
           {withMemo(dateArrRef.value, () => {
             return <>{
-                       dateArrRef.value.map((cell, i) => {
-                         return <MCalendarYearCell monthInfo={cell} ref={el => initObserver(el, i)}>
+              dateArrRef.value.map((cell, i) => {
+                return <MCalendarYearCell monthInfo={cell} ref={el => initObserver(el, i)}>
 
-                         </MCalendarYearCell>;
-                       })
-                     }</>;
+                </MCalendarYearCell>;
+              })
+            }</>;
           }, memoCache, 0)}
         </div>
 
       </div>
-
-    </m-border>
-      ;
+    </>;
   };
 
 
 }, {
   name: 'MCalendarYear',
-  props: typedProps,
+  props,
 });
 

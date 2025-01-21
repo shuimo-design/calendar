@@ -11,7 +11,7 @@ import useMonthCalendar from './composables/useMonthCalendar.ts';
 import useCalendarScroll from './composables/calendar/useCalendarScroll.ts';
 import MCalendarMonthCell from './components/MCalendarMonthCell.tsx';
 import MCalendarAgenda from './components/MCalendarAgenda.vue';
-import { typedProps } from '../../props.ts';
+import { props, typedProps } from '../../props.ts';
 import { weekInfo } from '../../composables/constant.ts';
 
 export default defineComponent<MCalendarProps>((_props, { slots }) => {
@@ -35,7 +35,7 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
   const memoCache: any[] = [];
   return () => {
 
-    return <m-border class="m-calendar">
+    return <>
       <div class="m-calendar-header m-calendar-row">
         {
           weekInfo.map((info, i) => (
@@ -63,10 +63,10 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
           </div>
         </div>
       </div>
-    </m-border>;
+    </>;
 
   };
 }, {
   name: 'MCalendarMonth',
-  props: typedProps,
+  props,
 });

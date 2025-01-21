@@ -15,18 +15,24 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
   const props = _props as Required<MCalendarProps>;
 
   return () => {
+    return <m-border class={['m-calendar',`m-calendar-${props.type}`]}>
+      {
+        () => {
+          if (_props.type === 'month') {
+            return <MCalendarMonth {...props}>
+              {{ cell: slots['month-cell'] }}
+            </MCalendarMonth>;
+          }
 
-    if (_props.type === 'month') {
-      return <MCalendarMonth {...props}>
-        {{ cell: slots['month-cell'] }}
-      </MCalendarMonth>;
-    }
+          if (_props.type === 'year') {
+            return <MCalendarYear {...props}>
+              {{ cell: slots['year-cell'] }}
+            </MCalendarYear>;
+          }
+        }
+      }
+    </m-border>;
 
-    if(_props.type === 'year') {
-      return <MCalendarYear {...props}>
-        {{ cell: slots['year-cell'] }}
-      </MCalendarYear>;
-    }
 
   };
 }, {

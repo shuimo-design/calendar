@@ -9,6 +9,7 @@
 import { MCOPO, MPropType } from './types/props';
 
 
+// 暂时不用，不然会报警告
 export const typedProps: MCOPO<Omit<MCalendarProps, 'type'>> = {
   modelValue: { type: [String, Date], default: '' },
   agenda: { type: Array, default: () => [] },
