@@ -8,7 +8,7 @@
  * 江湖的业务千篇一律，复杂的代码好几百行。
  */
 
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps<{
   agenda: AgendaInfoType;
@@ -56,6 +56,12 @@ const inactiveAgenda = () => {toggleActive(false);};
 </template>
 
 <style scoped>
+
+@supports (hanging-punctuation: first) and (font: -apple-system-body) and (-webkit-appearance: none) {
+  .m-calendar-agenda-main,.m-calendar-agenda-right {
+    margin-left: -1px;
+  }
+}
 
 .m-calendar-agenda {
   width: 100%;
