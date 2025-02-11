@@ -53,7 +53,7 @@ const toToggleActive = (indexInfo: { gIndex: number, aListIndex: number, aIndex:
 
 <template>
   <div class="m-calendar-agenda-row" v-for="(groups,gIndex) in agendasList">
-    <div v-for="(agendas,aListIndex) in groups">
+    <div class="m-calendar-agenda-group" v-for="(agendas,aListIndex) in groups">
       <Agenda :agenda="agenda" v-for="(agenda,aIndex) in agendas" @toggleActive="isActive=>toToggleActive({gIndex,aListIndex,aIndex},isActive)"/>
     </div>
   </div>

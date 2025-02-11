@@ -5,8 +5,10 @@ import { ref } from 'vue';
 import { useAgendaStore } from './core/store/agenda.store.ts';
 import { storeToRefs } from 'pinia';
 import SubscribeMenu from './core/plugins/subscribe/components/SubscribeMenu.vue';
+import { CalendarDay } from './core/model/month/composables/useMonthCalendar.ts';
+import dayjs from 'dayjs';
 
-const dateRef=  ref(new Date());
+const dateRef = ref(new Date());
 const showLunarDateRef = ref(true);
 
 const agendaStore = useAgendaStore();
@@ -18,7 +20,13 @@ enum CALENDAR_TYPE {
   WEEK = 'week',
   DAY = 'day',
 }
-const calendarType = ref<CALENDAR_TYPE>(CALENDAR_TYPE.MONTH)
+
+const calendarType = ref<CALENDAR_TYPE>(CALENDAR_TYPE.DAY);
+
+const selectDay = (day: CalendarDay) => {
+  dateRef.value = dayjs(`${day.year}-${day.month}-${day.day}`).toDate();
+  calendarType.value = CALENDAR_TYPE.DAY;
+};
 </script>
 
 <template>
@@ -27,25 +35,24 @@ const calendarType = ref<CALENDAR_TYPE>(CALENDAR_TYPE.MONTH)
     <div class="flex flex-col justify-center flex-items-center w-100vw h-100vh">
 
       <div>
-        <m-switch active-info="干支纪日法" inactive-info="公历纪日法" v-model="showLunarDateRef" />
+        <m-switch active-info="干支纪日法" inactive-info="公历纪日法" v-model="showLunarDateRef"/>
         <m-radio-group v-model="calendarType">
           <m-radio value="year">年</m-radio>
           <m-radio value="month">月</m-radio>
+          <m-radio value="day">日</m-radio>
         </m-radio-group>
       </div>
 
       <div class="flex">
         <SubscribeMenu/>
         <div class="wrapper">
-          <MCalendar v-model="dateRef" :agenda="agendaList" :type="calendarType">
+          <MCalendar v-model="dateRef" :agenda="agendaList" v-model:type="calendarType" @selectDay="selectDay">
             <template #month-cell="data">
               <LunarInfo :show-lunar-date="showLunarDateRef" :data="data"/>
             </template>
           </MCalendar>
         </div>
       </div>
-
-
 
 
     </div>
@@ -56,7 +63,7 @@ const calendarType = ref<CALENDAR_TYPE>(CALENDAR_TYPE.MONTH)
 
 <style scoped>
 
-.wrapper{
+.wrapper {
   height: 80vh;
   width: 80vw;
 }

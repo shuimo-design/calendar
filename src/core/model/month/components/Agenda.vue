@@ -70,6 +70,7 @@ const inactiveAgenda = () => {toggleActive(false);};
   opacity: 0.7;
   --m-calendar-agenda-color: var(--m-color-main);
   --m-calendar-agenda-w: 0px;
+  pointer-events: auto;
 
   &.is-active {
     opacity: 1;
