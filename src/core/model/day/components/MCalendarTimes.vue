@@ -44,7 +44,7 @@ onBeforeUnmount(()=> {
 });
 
 const getPercent = (time: number) => {
-  return `${(time / wholeTime) * 100}%`;
+  return `calc(${(time / wholeTime) * 100}% - 17px)`;
 };
 
 </script>
