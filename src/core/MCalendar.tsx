@@ -30,7 +30,7 @@ export default defineComponent<MCalendarProps>((_props, { slots,emit }) => {
         () => {
 
           if (_props.type === 'day') {
-            return <MCalendarDay {...props}>
+            return <MCalendarDay {...props} onUpdateType={updateType}>
               {{ cell: slots['day-cell'] }}
             </MCalendarDay>;
           }
@@ -42,7 +42,7 @@ export default defineComponent<MCalendarProps>((_props, { slots,emit }) => {
           }
 
           if (_props.type === 'year') {
-            return <MCalendarYear {...props}>
+            return <MCalendarYear {...props} onUpdateType={updateType}>
               {{ cell: slots['year-cell'] }}
             </MCalendarYear>;
           }

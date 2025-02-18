@@ -13,7 +13,9 @@ import MCalendarYearCell from './components/MCalendarYearCell.tsx';
 import useCalendarScroll from '../month/composables/calendar/useCalendarScroll.ts';
 
 
-export default defineComponent<MCalendarProps>((_props, { slots }) => {
+export default defineComponent<MCalendarProps, {
+  updateType: (type: string) => void,
+}>((_props, { slots,emit }) => {
 
   const props = _props as Required<MCalendarProps>;
 
@@ -29,12 +31,23 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
 
   const memoCache: any[] = [];
 
+  const updateType = (type: string) => {
+    emit('updateType', type);
+  }
+
+  const onCalendarWheel = (e: WheelEvent) => {
+    if (e.ctrlKey || e.metaKey) {
+      emit('updateType', 'month');
+    }
+    onWheel(e);
+  }
+
   return () => {
     return <>
       {/*<div class="m-calendar-header m-calendar-row">*/}
       {/*  <span class="year-info">{currentRef.value.year()}年</span>*/}
       {/*</div>*/}
-      <div class="m-calendar-view-wrapper" onWheel={onWheel} ref={viewWrapperRef}>
+      <div class="m-calendar-view-wrapper" onWheel={onCalendarWheel} ref={viewWrapperRef}>
         <div class="m-calendar-view-scroll-wrapper m-calendar-year-view" style={wrapperStyle.value}>
           {withMemo(dateArrRef.value, () => {
             return <>{
@@ -55,5 +68,6 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
 }, {
   name: 'MCalendarYear',
   props,
+  emits: ['updateType'],
 });
 

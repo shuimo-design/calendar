@@ -21,7 +21,9 @@ export type CalendarTime = {
   height?: number;
 }
 
-export default defineComponent<MCalendarProps>((_props, { slots }) => {
+export default defineComponent<MCalendarProps, {
+  updateType: (type: string) => void,
+}>((_props, { slots,emit }) => {
   const props = _props as Required<MCalendarProps>;
 
   const dayInfo = computed(() => {
@@ -39,8 +41,18 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
     { hour: 18, minute: 0, expand: true },
   ];
 
+  const onCalendarWheel = (e: WheelEvent) => {
+    if (e.ctrlKey || e.metaKey) {
+      // 向上滚动
+      if (e.deltaY < 0) {
+        emit('updateType', 'month');
+      }
+      return;
+    }
+  }
+
   return () => {
-    return <div class="m-calendar-day">
+    return <div class="m-calendar-day" onWheel={onCalendarWheel}>
       <div class="m-calendar-day-inner">
 
         <div class="m-calendar-day-header">
@@ -59,7 +71,7 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
         </div>
         <m-divider/>
 
-        <MCalendarTimes timeGroup={splitTimeGroup}/>
+        <MCalendarTimes timeGroup={splitTimeGroup} />
       </div>
     </div>;
   };
@@ -67,4 +79,5 @@ export default defineComponent<MCalendarProps>((_props, { slots }) => {
 }, {
   name: 'MCalendarDay',
   props,
+  emits: ['updateType'],
 });
