@@ -7,7 +7,7 @@
  * 江湖的业务千篇一律，复杂的代码好几百行。
  */
 import { defineComponent, withMemo } from 'vue';
-import { props, typedProps } from '../../props.ts';
+import { props } from '../../props.ts';
 import useYearCalendar from './composables/useYearCalendar.ts';
 import MCalendarYearCell from './components/MCalendarYearCell.tsx';
 import useCalendarScroll from '../month/composables/calendar/useCalendarScroll.ts';
@@ -15,7 +15,7 @@ import useCalendarScroll from '../month/composables/calendar/useCalendarScroll.t
 
 export default defineComponent<MCalendarProps, {
   updateType: (type: string) => void,
-}>((_props, { slots,emit }) => {
+}>((_props, { slots, emit }) => {
 
   const props = _props as Required<MCalendarProps>;
 
@@ -33,14 +33,18 @@ export default defineComponent<MCalendarProps, {
 
   const updateType = (type: string) => {
     emit('updateType', type);
-  }
+  };
 
   const onCalendarWheel = (e: WheelEvent) => {
     if (e.ctrlKey || e.metaKey) {
-      emit('updateType', 'month');
+      if (e.deltaY > 0) {
+        updateType('month');
+      } else {
+        return;
+      }
     }
     onWheel(e);
-  }
+  };
 
   return () => {
     return <>
