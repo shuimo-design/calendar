@@ -1,0 +1,40 @@
+.m-calendar-year{
+  --m-calendar-view-rows: 3;
+  --m-calendar-main-h: 100%;
+}
+
+.year-info {
+  margin-left: 1rem;
+  font-size: 2rem;
+  display: inline-block;
+}
+
+.m-calendar-year-view {
+  padding: 0.4rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 1rem;
+}
+
+.m-calendar-year-week-info {
+  font-weight: bold;
+}
+
+.m-calendar-year-cell-month-info {
+  font-weight: bold;
+  font-size: 1.4rem;
+  color: var(--m-color-main);
+}
+
+.m-calendar-year-cells {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-gap: 0.2rem;
+}
+
+.m-calendar-year-day{
+
+  &.m-calendar-not-in-month{
+    opacity: 0.1;
+  }
+}

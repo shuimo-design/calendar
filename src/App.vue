@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import MCalendar from './core/MCalendar.tsx';
+import { MCalendar } from '@shuimo/calendar-core';
 import LunarInfo from './components/LunarInfo.vue';
 import { ref } from 'vue';
-import { useAgendaStore } from './core/store/agenda.store.ts';
+import { useAgendaStore } from '@shuimo/calendar-core';
 import { storeToRefs } from 'pinia';
-import SubscribeMenu from './core/plugins/subscribe/components/SubscribeMenu.vue';
-import { CalendarDay } from './core/model/month/composables/useMonthCalendar.ts';
+import { SubscribeMenu } from '@shuimo/calendar-core';
+import { CalendarDay } from '@shuimo/calendar-core';
 import dayjs from 'dayjs';
 
 const dateRef = ref(new Date());

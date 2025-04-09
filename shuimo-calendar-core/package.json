@@ -1,0 +1,31 @@
+{
+  "name": "@shuimo-design/calendar-core",
+  "version": "0.0.1-beta.1+ai",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/calendar-core.umd.js",
+  "module": "./dist/calendar-core.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/calendar-core.es.js",
+      "require": "./dist/calendar-core.umd.js"
+    },
+    "./css": {
+      "default": "./dist/calendar-core.css",
+      "import": "./dist/calendar-core.css"
+    }
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.7.1",
+  "devDependencies": {
+    "@vitejs/plugin-vue-jsx": "^4.1.1"
+  }
+}

@@ -1,0 +1,79 @@
+@import "calendar-year.css";
+@import "calendar-day.css";
+
+:root {
+  --m-calendar-w: 100%;
+  --m-calendar-h: 100%;
+  --m-calendar-header: 22px;
+  --m-calendar-main-h: calc(var(--m-calendar-h) - var(--m-calendar-header) - 5px);
+
+  --transform-y: 0;
+
+  --m-calendar-view-rows: 6;
+
+}
+
+.m-calendar {
+  width: var(--m-calendar-w);
+  height: var(--m-calendar-h);
+
+  user-select: none;
+}
+
+.m-calendar-view-wrapper {
+  height: var(--m-calendar-main-h);
+  overflow: hidden;
+}
+
+.m-calendar-view-scroll-wrapper{
+  --m-calendar-view-total-rows: calc(var(--m-calendar-view-rows) + 2);
+  display: grid;
+  grid-template-areas: "main";
+  height: calc(100% / var(--m-calendar-view-rows) * var(--m-calendar-view-total-rows));
+  transform: translateY(calc(-100% / var(--m-calendar-view-total-rows) - var(--transform-y)));
+}
+
+.m-calendar-view {
+  grid-area: main;
+  display: grid;
+  grid-template-rows:  repeat(8, 1fr);
+  grid-template-columns: repeat(7, 1fr);
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+
+.m-calendar-agendas{
+  grid-area: main;
+  display: grid;
+  grid-template-rows:  repeat(8, 1fr);
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
+
+  .m-calendar-agenda-row{
+    padding-top: 5.8rem;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.m-calendar-header {
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.m-calendar-row {
+  display: grid;
+}
+
+.m-calendar-cell {
+  position: relative;
+  .m-border-main{
+    background: unset !important;
+    backdrop-filter: unset !important;
+  }
+  /*height: calc(var(--m-calendar-main-h) / 7);*/
+}
+

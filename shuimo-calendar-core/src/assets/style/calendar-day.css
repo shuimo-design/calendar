@@ -1,0 +1,18 @@
+.m-calendar-day-inner {
+  padding: 2rem;
+}
+
+.m-calendar-day-header {
+  font-size: 3.2rem;
+  display: flex;
+  justify-content: space-between;
+
+  .left{
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.m-calendar-day-header-lunar {
+  color: var(--m-color-main);
+}
